@@ -788,6 +788,74 @@ export interface PluginI18NLocale extends Schema.CollectionType {
   };
 }
 
+export interface ApiAuthorAuthor extends Schema.CollectionType {
+  collectionName: "authors";
+  info: {
+    singularName: "author";
+    pluralName: "authors";
+    displayName: "Author";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    bio: Attribute.Text;
+    bioImage: Attribute.Media;
+    posts: Attribute.Relation<
+      "api::author.author",
+      "oneToMany",
+      "api::post.post"
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "api::author.author",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "api::author.author",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCategoryCategory extends Schema.CollectionType {
+  collectionName: "categories";
+  info: {
+    singularName: "category";
+    pluralName: "categories";
+    displayName: "Category";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    name: Attribute.String;
+    slug: Attribute.UID<"api::category.category", "name">;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      "api::category.category",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      "api::category.category",
+      "oneToOne",
+      "admin::user"
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiGlobalGlobal extends Schema.SingleType {
   collectionName: "globals";
   info: {
@@ -893,6 +961,44 @@ export interface ApiPagePage extends Schema.CollectionType {
   };
 }
 
+export interface ApiPostPost extends Schema.CollectionType {
+  collectionName: "posts";
+  info: {
+    singularName: "post";
+    pluralName: "posts";
+    displayName: "Post";
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    title: Attribute.String;
+    content: Attribute.RichText;
+    excerpt: Attribute.String;
+    visibility: Attribute.Boolean;
+    featuredImage: Attribute.Media;
+    readingTime: Attribute.String;
+    slug: Attribute.UID<"api::post.post", "title">;
+    category: Attribute.Relation<
+      "api::post.post",
+      "manyToOne",
+      "api::author.author"
+    >;
+    author: Attribute.Relation<
+      "api::post.post",
+      "manyToOne",
+      "api::author.author"
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<"api::post.post", "oneToOne", "admin::user"> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<"api::post.post", "oneToOne", "admin::user"> &
+      Attribute.Private;
+  };
+}
+
 declare module "@strapi/types" {
   export module Shared {
     export interface ContentTypes {
@@ -911,8 +1017,11 @@ declare module "@strapi/types" {
       "plugin::users-permissions.role": PluginUsersPermissionsRole;
       "plugin::users-permissions.user": PluginUsersPermissionsUser;
       "plugin::i18n.locale": PluginI18NLocale;
+      "api::author.author": ApiAuthorAuthor;
+      "api::category.category": ApiCategoryCategory;
       "api::global.global": ApiGlobalGlobal;
       "api::page.page": ApiPagePage;
+      "api::post.post": ApiPostPost;
     }
   }
 }
