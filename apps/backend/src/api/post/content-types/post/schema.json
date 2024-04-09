@@ -4,7 +4,8 @@
   "info": {
     "singularName": "post",
     "pluralName": "posts",
-    "displayName": "Post"
+    "displayName": "Post",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -24,14 +25,15 @@
       "type": "boolean"
     },
     "featuredImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "readingTime": {
       "type": "string"
@@ -40,10 +42,10 @@
       "type": "uid",
       "targetField": "title"
     },
-    "category": {
+    "categories": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::author.author",
+      "relation": "manyToMany",
+      "target": "api::category.category",
       "inversedBy": "posts"
     },
     "author": {
